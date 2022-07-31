@@ -64,10 +64,8 @@ print(train.age)
 
 #funkcja wejsciowa
 def input_fn(features, labels, training=True, batch_size=256):
-    # Convert the inputs to a Dataset.
     dataset = tf.data.Dataset.from_tensor_slices((dict(features), labels))
 
-    # Shuffle and repeat if you are in training mode.
     if training:
         dataset = dataset.shuffle(1000).repeat()
     
@@ -77,7 +75,6 @@ def input_fn(features, labels, training=True, batch_size=256):
 
 
 # Feature columns describe how to use the input.
-#
 my_feature_columns = []
 for key in train.keys():
     my_feature_columns.append(tf.feature_column.numeric_column(key=key))
@@ -96,7 +93,6 @@ classifier = tf.estimator.DNNClassifier(
 classifier.train(
     input_fn=lambda: input_fn(train, train_y, training=True),
     steps=5000)
-# We include a lambda to avoid creating an inner function previously
 
 
 eval_result = classifier.evaluate(input_fn=lambda: input_fn(test, test_y, training=False))
